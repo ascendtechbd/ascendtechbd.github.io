@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascend Tech BD | AI সহায়তা</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --bg-deep:       #06091a;
+            --bg-mid:        #0a1122;
+            --bg-card:       rgba(255,255,255,0.04);
+            --bg-card-hover: rgba(255,255,255,0.07);
+            --accent:        #3b82f6;
+            --accent-glow:   rgba(59,130,246,0.35);
+            --accent-dark:   #1d4ed8;
+            --user-bubble:   linear-gradient(135deg,#2563eb,#1d4ed8);
+            --ai-bubble:     rgba(255,255,255,0.06);
+            --border:        rgba(255,255,255,0.08);
+            --border-accent: rgba(59,130,246,0.4);
+            --text-main:     #e2e8f0;
+            --text-muted:    #64748b;
+            --text-dim:      #94a3b8;
+            --green:         #22c55e;
+            --font-display:  'Rajdhani', sans-serif;
+            --font-body:     'Hind Siliguri', sans-serif;
+        }
+
+        /* ===== RESET ===== */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background-color: var(--bg-mid);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(6, 9, 26, 0.92);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-container { display:flex; align-items:center; gap:10px; }
+        .nav-logo { height:45px; width:auto; object-fit:contain; }
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links { display:flex; gap:25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .menu-icon { display:none; font-size:28px; color:white; cursor:pointer; }
+
+        /* ===== LAYOUT ===== */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 20px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .ai-avatar-large {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.25);
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            color: var(--green);
+            margin-left: 10px;
+        }
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* ===== CHAT BOX ===== */
+        .chat-box {
+            flex: 1;
+            background: rgba(6, 9, 26, 0.6);
+            border: 1px solid var(--border-accent);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            min-height: 520px;
+        }
+
+        .chat-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+        }
+        .chat-topbar-name { font-family: var(--font-display); font-weight: 600; }
+
+        .clear-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+        .clear-btn:hover { color:#f87171; background:rgba(239,68,68,0.1); }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .message-row { display: flex; gap: 12px; align-items: flex-end; animation: slide-up 0.35s ease-out; }
+        .message-row.user { flex-direction: row-reverse; }
+        @keyframes slide-up { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+        .msg-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items:center; justify-content:center; }
+        .ai-av { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); }
+        .user-av { background: rgba(255,255,255,0.08); }
+
+        .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 0.92rem; max-width: 75%; }
+        .msg-bubble.ai { background: var(--ai-bubble); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+        .msg-bubble.user { background: var(--user-bubble); color: #fff; border-bottom-right-radius: 4px; }
+
+        /* ===== INPUT AREA ===== */
+        .suggestions { padding: 0 20px 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .suggestion-chip {
+            background: rgba(59,130,246,0.08); border: 1px solid var(--border-accent);
+            color: var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; cursor: pointer;
+        }
+
+        .chat-input-area { padding: 14px 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end; }
+        #userInput {
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            border-radius: 14px; padding: 11px 16px; color: var(--text-main); resize: none; outline: none;
+        }
+        .send-btn {
+            width: 46px; height: 46px; border-radius: 12px; background: var(--user-bubble);
+            border: none; color: #fff; cursor: pointer; display: flex; align-items:center; justify-content:center;
+        }
+
+        /* ===== TYPING INDICATOR ===== */
+        .typing-indicator { display: flex; gap: 5px; padding: 5px; }
+        .typing-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: bounce 1.2s infinite; }
+        @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
+
+        @media (max-width: 768px) { .nav-links { display:none; } .menu-icon { display:block; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo-container">
+        <img src="assets/images/logo.png" alt="Logo" class="nav-logo">
+        <span class="logo-text">Ascend Tech BD</span>
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="navLinks">
+        <a href="index.html">হোম</a>
+        <a href="about.html">আমাদের সম্পর্কে</a>
+        <a href="services.html">সেবাসমূহ</a>
+        <a href="projects.html">প্রজেক্ট</a>
+        <a href="aichat.html" class="active">AI সহায়তা</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="ai-avatar-large">🤖</div>
+        <div class="page-header-info">
+            <h1>AI রিসেপশনিস্ট <span class="status-badge"><span class="status-dot"></span>অনলাইন</span></h1>
+            <p>Ascend Tech BD — আপনার যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত</p>
+        </div>
+    </div>
+
+    <div class="chat-box">
+        <div class="chat-topbar">
+            <div class="chat-topbar-name">Aria — AI রিসেপশনিস্ট</div>
+            <button class="clear-btn" onclick="clearChat()">🗑 মুছুন</button>
+        </div>
+        <div id="messages"></div>
+        <div class="suggestions" id="suggestions">
+            <button class="suggestion-chip" onclick="sendSuggestion('Ascend Tech BD কী ধরনের কাজ করে?')">আমাদের কাজ কী?</button>
+            <button class="suggestion-chip" onclick="sendSuggestion('কিভাবে যোগাযোগ করবো?')">যোগাযোগের উপায়</button>
+        </div>
+        <div class="chat-input-area">
+            <textarea id="userInput" placeholder="আপনার প্রশ্ন লিখুন..." rows="1" onkeydown="handleKey(event)"></textarea>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let conversationHistory = [];
+    let isTyping = false;
+
+    const SYSTEM_PROMPT = `তুমি Aria, Ascend Tech BD-র একজন বন্ধুত্বপূর্ণ ও পেশাদার AI রিসেপশনিস্ট।
+    Ascend Tech BD রোবটিক্স, IoT সলিউশন, এবং স্মার্ট অটোমেশন নিয়ে কাজ করে। বাংলায় কথা বলো।`;
+
+    window.onload = showWelcome;
+
+    function showWelcome() {
+        appendMessage('ai', "স্বাগতম! আমি Aria। Ascend Tech BD-র পক্ষ থেকে আপনাকে সাহায্য করতে পারি।");
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        if (!text || isTyping) return;
+
+        appendMessage('user', text);
+        conversationHistory.push({ role: 'user', content: text });
+        input.value = '';
+
+        isTyping = true;
+        const typingId = showTyping();
+
+        try {
+            // Render সার্ভারের সঠিক লিঙ্ক
+            const SERVER_URL = 'https://ascendtechbd-github-io.onrender.com/chat'; 
+
+            const response = await fetch(SERVER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: 'llama-3.3-70b-versatile', 
+                    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...conversationHistory]
+                })
+            });
+
+            removeTyping(typingId);
+            const data = await response.json();
+            const reply = data.choices?.[0]?.message?.content || 'দুঃখিত, আমি উত্তর দিতে পারছি না।';
+            
+            conversationHistory.push({ role: 'assistant', content: reply });
+            appendMessage('ai', reply);
+        } catch (err) {
+            removeTyping(typingId);
+            appendMessage('ai', "⚠️ সার্ভারের সাথে সংযোগ করা যাচ্ছে না। দয়া করে কিছুক্ষণ পর চেষ্টা করুন।");
+        } finally {
+            isTyping = false;
+        }
+    }
+
+    function appendMessage(role, text) {
+        const msgs = document.getElementById('messages');
+        const row = document.createElement('div');
+        row.className = `message-row ${role}`;
+        row.innerHTML = `
+            <div class="msg-avatar ${role === 'ai' ? 'ai-av' : 'user-av'}">${role === 'ai' ? '🤖' : '👤'}</div>
+            <div class="msg-bubble ${role}">${text.replace(/\n/g, '<br>')}</div>
+        `;
+        msgs.appendChild(row);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+        const id = 'typing-' + Date.now();
+        const msgs = document.getElementById('messages');
+        const el = document.createElement('div');
+        el.className = 'message-row ai';
+        el.id = id;
+        el.innerHTML = `
+            <div class="msg-avatar ai-av">🤖</div>
+            <div class="msg-bubble ai"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+        msgs.appendChild(el);
+        msgs.scrollTop = msgs.scrollHeight;
+        return id;
+    }
+
+    function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
+    function clearChat() { document.getElementById('messages').innerHTML = ''; conversationHistory = []; showWelcome(); }
+    function sendSuggestion(text) { document.getElementById('userInput').value = text; sendMessage(); }
+    function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+</script>
+</body>
+</html>
